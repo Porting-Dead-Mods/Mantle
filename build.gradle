@@ -12,7 +12,10 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'io.freefair.lombok' version '8.6'
+    id 'java'
 }
+
+jarJar.enable()
 
 repositories {
     mavenCentral()
@@ -41,7 +44,6 @@ group = 'slimeknights.mantle'
 base {
     archivesName = 'Mantle'
 }
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 // sets version to the slimeKnights version format
 task buildInfo {
@@ -168,12 +170,16 @@ tasks.named('jar', Jar).configure {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+    setEnabled(true)
 }
 
 jar.finalizedBy('reobfJar')
 
 java {
     withSourcesJar()
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 artifacts {
